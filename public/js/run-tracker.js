@@ -1,10 +1,12 @@
 var RunTracker = (function() {
     var map       = null,
-        marker    = null,
         runTime   = 0,
         timeHandler = null,
         timer     = null,
+        trails    = {},
+        _userTrail = "user",
         listeners = {},
+        curPos    = null,
 
         that = {};
 
@@ -21,10 +23,6 @@ var RunTracker = (function() {
             document.getElementById(options.map),
             mapOptions
         );
-        
-        marker = new google.maps.Marker({
-            map: map
-        });
 
         timer = options.timer;
     };
@@ -51,6 +49,8 @@ var RunTracker = (function() {
 
     that.updatePosition = function(position) {
         that.setMapPosition(position);
+
+        trails[_userTrail].addPoint(position.coords);
     };
 
     that.setMapPosition = function(position) {
@@ -59,8 +59,9 @@ var RunTracker = (function() {
             position.coords.longitude
         );
 
-        marker.setPosition(latLng);
         map.setCenter(latLng);
+
+        curPos = position;
     };
 
     that.startTimer = function() {
@@ -70,6 +71,21 @@ var RunTracker = (function() {
             runTime ++;
             $(timer).html(runTime);
         }, 1000);
+    };
+
+    that.startRun = function(/* id */) {
+        that.startTimer();
+        that.watchPosition();
+        that.addTrail();
+    };
+
+    that.addTrail = function() {
+        var trail = new Trail({
+            map: map,
+            position: curPos.coords
+        });
+
+        trails[_userTrail] = trail;
     };
     
     that.emit = function(msg, data) {

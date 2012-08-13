@@ -13,6 +13,7 @@
 
     <script src=js/client.js></script>
     <script src=js/run-tracker.js></script>
+    <script src=js/trail.js></script>
     <script>
 
         Client.init({
@@ -31,8 +32,7 @@
             $(document).on("click", "[data-start]", function(e) {
                 e.preventDefault();
 
-                RunTracker.startTimer();
-                RunTracker.watchPosition();
+                RunTracker.startRun();
 
                 // listen out for GPS position changes
                 RunTracker.on("position:change", function(position) {
