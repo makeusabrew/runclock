@@ -4,7 +4,7 @@
         <a data-start href=#>start</a>
     </form>
     Run time: <span data-timer=0>00:00:00</span>
-    Distance: <span data-distance=0>0</span> Km
+    Distance: <span data-distance=0>0</span> m
     <div id=gmap style="width:100%;height:300px">
     </div>
 {/block}
@@ -25,7 +25,8 @@
         $(function() {
             RunTracker.init({
                 map: "gmap",
-                timer: "[data-timer]"
+                timer: "[data-timer]",
+                distance: "[data-distance]"
             });
 
             RunTracker.setStartPosition();

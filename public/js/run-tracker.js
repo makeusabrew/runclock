@@ -8,8 +8,14 @@ var RunTracker = (function() {
         listeners = {},
         curPos    = null,
         runId     = 0,
+        distance  = 0,
+        distElem  = null,
 
         that = {};
+
+    function deg2rad(n) {
+        return n * (Math.PI / 180.0);
+    }
 
     that.init = function(options) {
         var mapOptions = {
@@ -26,6 +32,8 @@ var RunTracker = (function() {
         );
 
         timer = options.timer;
+
+        distElem = options.distance;
     };
 
     that.setStartPosition = function() {
@@ -49,6 +57,15 @@ var RunTracker = (function() {
     };
 
     that.updatePosition = function(position) {
+        var dist = that.haversine(
+            curPos.coords,
+            position.coords
+        );
+
+        distance += dist;
+
+        $(distElem).html(Math.round(distance * 1000));
+
         that.setMapPosition(position);
 
         trails[_userTrail].addPoint(position.coords);
@@ -97,6 +114,24 @@ var RunTracker = (function() {
             position: curPos,
             id: runId
         };
+    };
+
+    that.haversine = function(from, to) {
+        // @see http://www.movable-type.co.uk/scripts/latlong.html
+        var R = 6371;
+        var latDist = deg2rad(to.latitude - from.latitude);
+        var longDist = deg2rad(to.longitude - from.longitude);
+
+        var lat1 = deg2rad(from.latitude);
+        var lat2 = deg2rad(to.latitude);
+
+        var a = Math.sin(latDist / 2)  * Math.sin(latDist / 2) +
+                Math.sin(longDist / 2) * Math.sin(longDist / 2) *
+                Math.cos(lat1) * Math.cos(lat2);
+
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        return R * c;
     };
     
     that.emit = function(msg, data) {
