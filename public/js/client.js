@@ -15,5 +15,9 @@ var Client = (function() {
         });
     };
 
+    that.emit = function(msg, data) {
+        socket.emit(msg, data);
+    };
+
     return that;
 }());

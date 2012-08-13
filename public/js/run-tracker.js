@@ -1,6 +1,9 @@
 var RunTracker = (function() {
     var map       = null,
         marker    = null,
+        runTime   = 0,
+        timeHandler = null,
+        timer     = null,
         listeners = {},
 
         that = {};
@@ -22,13 +25,15 @@ var RunTracker = (function() {
         marker = new google.maps.Marker({
             map: map
         });
+
+        timer = options.timer;
     };
 
     that.setStartPosition = function() {
         navigator.geolocation.getCurrentPosition(function(position) {
             that.setMapPosition(position);
         }, function(err) {
-            console.log(err);
+            that.emit("position:error", err);
         }, {
             enableHighAccuracy: true
         });
@@ -38,8 +43,7 @@ var RunTracker = (function() {
         navigator.geolocation.watchPosition(function(position) {
             that.emit("position:change", position);
         }, function(err) {
-            //
-            console.log(err);
+            that.emit("position:error", err);
         }, {
             enableHighAccuracy: true
         });
@@ -57,6 +61,15 @@ var RunTracker = (function() {
 
         marker.setPosition(latLng);
         map.setCenter(latLng);
+    };
+
+    that.startTimer = function() {
+        // do I like having the timer stuff all embedded in RunTracker like this?
+        // not really... worth thinking about
+        timeHandler = setInterval(function() {
+            runTime ++;
+            $(timer).html(runTime);
+        }, 1000);
     };
     
     that.emit = function(msg, data) {

@@ -3,7 +3,7 @@
     <form class=actions>
         <a data-start href=#>start</a>
     </form>
-    Run time: 00:00:00
+    Run time: <span data-timer=0>00:00:00</span>
     <div id=gmap style="width:100%;height:300px">
     </div>
 {/block}
@@ -22,7 +22,8 @@
 
         $(function() {
             RunTracker.init({
-                map: "gmap"
+                map: "gmap",
+                timer: "[data-timer]"
             });
 
             RunTracker.setStartPosition();
@@ -30,10 +31,15 @@
             $(document).on("click", "[data-start]", function(e) {
                 e.preventDefault();
 
+                RunTracker.startTimer();
                 RunTracker.watchPosition();
 
+                // listen out for GPS position changes
                 RunTracker.on("position:change", function(position) {
                     RunTracker.updatePosition(position);
+
+                    // proxy through the update to the server
+                    Client.emit("position:change", position);
                 });
             });
         });
