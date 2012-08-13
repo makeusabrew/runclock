@@ -3,3 +3,4 @@
 RewriteEngine On
 RewriteRule ^(.*)$ public/$1 [L]
 SetEnvIf Host localhost PROJECT_MODE=build
+SetEnvIf Host ^192.168. PROJECT_MODE=build
