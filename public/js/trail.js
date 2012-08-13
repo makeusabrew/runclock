@@ -3,6 +3,7 @@ var Trail = function(options) {
     this.marker = null;
     this.map = null;
     this.line = null;
+    this.runId = null;
 
     this.map = options.map;
     this.line = new google.maps.Polyline();
@@ -12,6 +13,8 @@ var Trail = function(options) {
     this.marker = new google.maps.Marker({
         map: this.map
     });
+
+    this.runId = options.id;
 
     this.addPoint(options.position);
 }

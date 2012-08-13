@@ -7,6 +7,7 @@ var RunTracker = (function() {
         _userTrail = "user",
         listeners = {},
         curPos    = null,
+        runId     = 0,
 
         that = {};
 
@@ -73,7 +74,9 @@ var RunTracker = (function() {
         }, 1000);
     };
 
-    that.startRun = function(/* id */) {
+    that.startRun = function(id) {
+        runId = id;
+
         that.startTimer();
         that.watchPosition();
         that.addTrail();
@@ -82,10 +85,18 @@ var RunTracker = (function() {
     that.addTrail = function() {
         var trail = new Trail({
             map: map,
-            position: curPos.coords
+            position: curPos.coords,
+            id: runId
         });
 
         trails[_userTrail] = trail;
+    };
+
+    that.getData = function() {
+        return {
+            position: curPos,
+            id: runId
+        };
     };
     
     that.emit = function(msg, data) {

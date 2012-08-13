@@ -12,11 +12,16 @@ var Client = (function() {
         socket.on("sID", function(sID) {
             console.log(sID);
             id = sID;
+            // @todo XHR to Apache to claim the ID
         });
     };
 
     that.emit = function(msg, data) {
         socket.emit(msg, data);
+    };
+
+    that.on = function(msg, cb) {
+        socket.on(msg, cb);
     };
 
     return that;

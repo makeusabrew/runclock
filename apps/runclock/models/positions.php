@@ -28,6 +28,10 @@ class Positions extends Table {
             'timestamp' => array(
                 'type' => 'text',
             ),
+            'activity_id' => array(
+                'type' => 'foreign_key',
+                'table' => 'Activities',
+            ),
         ),
     );
 }
