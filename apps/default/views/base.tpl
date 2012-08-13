@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width; initial-scale=1.0">
     <title>{block name='title'}{setting value="site.title"}{/block}</title>
+
+    <base href="{$base_href}"></base>
 </head>
 <body>
     <div class=container>

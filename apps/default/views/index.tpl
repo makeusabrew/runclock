@@ -5,8 +5,11 @@
     </div>
 {/block}
 {block name="script"}
+    <script src="js/deps/socket.io.min.js"></script>
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAac0Ip2WK40BpDCV1X8oTRsMFVgU7fZXc&sensor=true"></script>
     <script>
+        var socket = io.connect("{setting value='runclock.socket_server'}");
+
         $(function() {
             var mapOptions = {
                 center: new google.maps.LatLng(0, 0),
